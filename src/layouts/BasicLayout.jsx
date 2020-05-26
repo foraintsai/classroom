@@ -134,8 +134,8 @@ const BasicLayout = props => {
             <span>{route.breadcrumbName}</span>
           );
         }}
-        footerRender={() => defaultFooterDom}
-        menuDataRender={menuDataRender}
+        // footerRender={() => defaultFooterDom}
+        // menuDataRender={menuDataRender}
         rightContentRender={() => <RightContent />}
         {...props}
         {...settings}
@@ -144,15 +144,15 @@ const BasicLayout = props => {
           {children}
         </Authorized>
       </ProLayout>
-      <SettingDrawer
-        settings={settings}
-        onSettingChange={config =>
-          dispatch({
-            type: 'settings/changeSetting',
-            payload: config,
-          })
-        }
-      />
+      {/*<SettingDrawer*/}
+      {/*  settings={settings}*/}
+      {/*  onSettingChange={config =>*/}
+      {/*    dispatch({*/}
+      {/*      type: 'settings/changeSetting',*/}
+      {/*      payload: config,*/}
+      {/*    })*/}
+      {/*  }*/}
+      {/*/>*/}
     </>
   );
 };

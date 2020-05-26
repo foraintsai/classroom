@@ -15,7 +15,7 @@ export default {
   'menu.exception.404': '404',
   'menu.exception.500': '500',
   'menu.form': '表单页',
-  'menu.form.basic-form': '基础表单',
+  'menu.form.basic-formsss': '基础表单',
   'menu.form.step-form': '分步表单',
   'menu.form.step-form.info': '分步表单（填写转账信息）',
   'menu.form.step-form.confirm': '分步表单（确认转账信息）',
