@@ -9,3 +9,10 @@ export async function queryCurrent() {
 export async function queryNotices() {
   return request('/api/notices');
 }
+
+export async function register(params) {
+  return request('/user/register',{
+    method: 'get',
+    params: params,
+  });
+}

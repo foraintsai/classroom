@@ -7,11 +7,11 @@
  */
 export default {
   dev: {
-    '/api/': {
-      target: 'https://preview.pro.ant.design',
+    '/user/': {
+      target: 'http://192.168.1.24:9066',
       changeOrigin: true,
       pathRewrite: {
-        '^': '',
+        '^/user/': '/api/v1/user/',
       },
     },
   },

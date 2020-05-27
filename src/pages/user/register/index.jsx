@@ -37,42 +37,42 @@ const Register = ({ submitting, dispatch, userAndregister }) => {
   const confirmDirty = false;
   let interval;
   const [form] = Form.useForm();
-  useEffect(() => {
-    if (!userAndregister) {
-      return;
-    }
+  // useEffect(() => {
+  //   if (!userAndregister) {
+  //     return;
+  //   }
+  //
+  //   const account = form.getFieldValue('mail');
+  //
+  //   if (userAndregister.status === 'ok') {
+  //     message.success('注册成功！');
+  //     history.push({
+  //       pathname: '/user/register-result',
+  //       state: {
+  //         account,
+  //       },
+  //     });
+  //   }
+  // }, [userAndregister]);
+  // useEffect(
+  //   () => () => {
+  //     clearInterval(interval);
+  //   },
+  //   [],
+  // );
 
-    const account = form.getFieldValue('mail');
-
-    if (userAndregister.status === 'ok') {
-      message.success('注册成功！');
-      history.push({
-        pathname: '/user/register-result',
-        state: {
-          account,
-        },
-      });
-    }
-  }, [userAndregister]);
-  useEffect(
-    () => () => {
-      clearInterval(interval);
-    },
-    [],
-  );
-
-  const onGetCaptcha = () => {
-    let counts = 59;
-    setCount(counts);
-    interval = window.setInterval(() => {
-      counts -= 1;
-      setCount(counts);
-
-      if (counts === 0) {
-        clearInterval(interval);
-      }
-    }, 1000);
-  };
+  // const onGetCaptcha = () => {
+  //   let counts = 59;
+  //   setCount(counts);
+  //   interval = window.setInterval(() => {
+  //     counts -= 1;
+  //     setCount(counts);
+  //
+  //     if (counts === 0) {
+  //       clearInterval(interval);
+  //     }
+  //   }, 1000);
+  // };
 
   const getPasswordStatus = () => {
     const value = form.getFieldValue('password');
@@ -89,9 +89,10 @@ const Register = ({ submitting, dispatch, userAndregister }) => {
   };
 
   const onFinish = values => {
+    values.username = `${values.username}@eastcom-sw.com`;
     dispatch({
-      type: 'userAndregister/submit',
-      payload: { ...values, prefix },
+      type: 'user/register',
+      payload: { ...values},
     });
   };
 
@@ -165,7 +166,8 @@ const Register = ({ submitting, dispatch, userAndregister }) => {
       </h3>
       <Form form={form} name="UserRegister" onFinish={onFinish}>
         <FormItem
-          name="mail"
+          extra={'请填写您的工作邮箱，注册成功后我们将向您的邮箱发送账号及密码'}
+          name="username"
           rules={[
             {
               required: true,
@@ -173,174 +175,169 @@ const Register = ({ submitting, dispatch, userAndregister }) => {
                 id: 'userandregister.email.required',
               }),
             },
-            {
-              type: 'email',
-              message: formatMessage({
-                id: 'userandregister.email.wrong-format',
-              }),
-            },
+            // {
+            //   type: 'email',
+            //   message: formatMessage({
+            //     id: 'userandregister.email.wrong-format',
+            //   }),
+            // },
           ]}
         >
-          <Input
-            size="large"
-            placeholder={formatMessage({
-              id: 'userandregister.email.placeholder',
-            })}
-          />
+          <Input addonAfter="@eastcom-sw.com" />
         </FormItem>
-        <Popover
-          getPopupContainer={node => {
-            if (node && node.parentNode) {
-              return node.parentNode;
-            }
+        {/*<Popover*/}
+        {/*  getPopupContainer={node => {*/}
+        {/*    if (node && node.parentNode) {*/}
+        {/*      return node.parentNode;*/}
+        {/*    }*/}
 
-            return node;
-          }}
-          content={
-            visible && (
-              <div
-                style={{
-                  padding: '4px 0',
-                }}
-              >
-                {passwordStatusMap[getPasswordStatus()]}
-                {renderPasswordProgress()}
-                <div
-                  style={{
-                    marginTop: 10,
-                  }}
-                >
-                  <FormattedMessage id="userandregister.strength.msg" />
-                </div>
-              </div>
-            )
-          }
-          overlayStyle={{
-            width: 240,
-          }}
-          placement="right"
-          visible={visible}
-        >
-          <FormItem
-            name="password"
-            className={
-              form.getFieldValue('password') &&
-              form.getFieldValue('password').length > 0 &&
-              styles.password
-            }
-            rules={[
-              {
-                validator: checkPassword,
-              },
-            ]}
-          >
-            <Input
-              size="large"
-              type="password"
-              placeholder={formatMessage({
-                id: 'userandregister.password.placeholder',
-              })}
-            />
-          </FormItem>
-        </Popover>
-        <FormItem
-          name="confirm"
-          rules={[
-            {
-              required: true,
-              message: formatMessage({
-                id: 'userandregister.confirm-password.required',
-              }),
-            },
-            {
-              validator: checkConfirm,
-            },
-          ]}
-        >
-          <Input
-            size="large"
-            type="password"
-            placeholder={formatMessage({
-              id: 'userandregister.confirm-password.placeholder',
-            })}
-          />
-        </FormItem>
-        <InputGroup compact>
-          <Select
-            size="large"
-            value={prefix}
-            onChange={changePrefix}
-            style={{
-              width: '20%',
-            }}
-          >
-            <Option value="86">+86</Option>
-            <Option value="87">+87</Option>
-          </Select>
-          <FormItem
-            style={{
-              width: '80%',
-            }}
-            name="mobile"
-            rules={[
-              {
-                required: true,
-                message: formatMessage({
-                  id: 'userandregister.phone-number.required',
-                }),
-              },
-              {
-                pattern: /^\d{11}$/,
-                message: formatMessage({
-                  id: 'userandregister.phone-number.wrong-format',
-                }),
-              },
-            ]}
-          >
-            <Input
-              size="large"
-              placeholder={formatMessage({
-                id: 'userandregister.phone-number.placeholder',
-              })}
-            />
-          </FormItem>
-        </InputGroup>
-        <Row gutter={8}>
-          <Col span={16}>
-            <FormItem
-              name="captcha"
-              rules={[
-                {
-                  required: true,
-                  message: formatMessage({
-                    id: 'userandregister.verification-code.required',
-                  }),
-                },
-              ]}
-            >
-              <Input
-                size="large"
-                placeholder={formatMessage({
-                  id: 'userandregister.verification-code.placeholder',
-                })}
-              />
-            </FormItem>
-          </Col>
-          <Col span={8}>
-            <Button
-              size="large"
-              disabled={!!count}
-              className={styles.getCaptcha}
-              onClick={onGetCaptcha}
-            >
-              {count
-                ? `${count} s`
-                : formatMessage({
-                    id: 'userandregister.register.get-verification-code',
-                  })}
-            </Button>
-          </Col>
-        </Row>
+        {/*    return node;*/}
+        {/*  }}*/}
+        {/*  content={*/}
+        {/*    visible && (*/}
+        {/*      <div*/}
+        {/*        style={{*/}
+        {/*          padding: '4px 0',*/}
+        {/*        }}*/}
+        {/*      >*/}
+        {/*        {passwordStatusMap[getPasswordStatus()]}*/}
+        {/*        {renderPasswordProgress()}*/}
+        {/*        <div*/}
+        {/*          style={{*/}
+        {/*            marginTop: 10,*/}
+        {/*          }}*/}
+        {/*        >*/}
+        {/*          <FormattedMessage id="userandregister.strength.msg" />*/}
+        {/*        </div>*/}
+        {/*      </div>*/}
+        {/*    )*/}
+        {/*  }*/}
+        {/*  overlayStyle={{*/}
+        {/*    width: 240,*/}
+        {/*  }}*/}
+        {/*  placement="right"*/}
+        {/*  visible={visible}*/}
+        {/*>*/}
+        {/*  <FormItem*/}
+        {/*    name="password"*/}
+        {/*    className={*/}
+        {/*      form.getFieldValue('password') &&*/}
+        {/*      form.getFieldValue('password').length > 0 &&*/}
+        {/*      styles.password*/}
+        {/*    }*/}
+        {/*    rules={[*/}
+        {/*      {*/}
+        {/*        validator: checkPassword,*/}
+        {/*      },*/}
+        {/*    ]}*/}
+        {/*  >*/}
+        {/*    <Input*/}
+        {/*      size="large"*/}
+        {/*      type="password"*/}
+        {/*      placeholder={formatMessage({*/}
+        {/*        id: 'userandregister.password.placeholder',*/}
+        {/*      })}*/}
+        {/*    />*/}
+        {/*  </FormItem>*/}
+        {/*</Popover>*/}
+        {/*<FormItem*/}
+        {/*  name="confirm"*/}
+        {/*  rules={[*/}
+        {/*    {*/}
+        {/*      required: true,*/}
+        {/*      message: formatMessage({*/}
+        {/*        id: 'userandregister.confirm-password.required',*/}
+        {/*      }),*/}
+        {/*    },*/}
+        {/*    {*/}
+        {/*      validator: checkConfirm,*/}
+        {/*    },*/}
+        {/*  ]}*/}
+        {/*>*/}
+        {/*  <Input*/}
+        {/*    size="large"*/}
+        {/*    type="password"*/}
+        {/*    placeholder={formatMessage({*/}
+        {/*      id: 'userandregister.confirm-password.placeholder',*/}
+        {/*    })}*/}
+        {/*  />*/}
+        {/*</FormItem>*/}
+        {/*<InputGroup compact>*/}
+        {/*  <Select*/}
+        {/*    size="large"*/}
+        {/*    value={prefix}*/}
+        {/*    onChange={changePrefix}*/}
+        {/*    style={{*/}
+        {/*      width: '20%',*/}
+        {/*    }}*/}
+        {/*  >*/}
+        {/*    <Option value="86">+86</Option>*/}
+        {/*    <Option value="87">+87</Option>*/}
+        {/*  </Select>*/}
+        {/*  <FormItem*/}
+        {/*    style={{*/}
+        {/*      width: '80%',*/}
+        {/*    }}*/}
+        {/*    name="mobile"*/}
+        {/*    rules={[*/}
+        {/*      {*/}
+        {/*        required: true,*/}
+        {/*        message: formatMessage({*/}
+        {/*          id: 'userandregister.phone-number.required',*/}
+        {/*        }),*/}
+        {/*      },*/}
+        {/*      {*/}
+        {/*        pattern: /^\d{11}$/,*/}
+        {/*        message: formatMessage({*/}
+        {/*          id: 'userandregister.phone-number.wrong-format',*/}
+        {/*        }),*/}
+        {/*      },*/}
+        {/*    ]}*/}
+        {/*  >*/}
+        {/*    <Input*/}
+        {/*      size="large"*/}
+        {/*      placeholder={formatMessage({*/}
+        {/*        id: 'userandregister.phone-number.placeholder',*/}
+        {/*      })}*/}
+        {/*    />*/}
+        {/*  </FormItem>*/}
+        {/*</InputGroup>*/}
+        {/*<Row gutter={8}>*/}
+        {/*  <Col span={16}>*/}
+        {/*    <FormItem*/}
+        {/*      name="captcha"*/}
+        {/*      rules={[*/}
+        {/*        {*/}
+        {/*          required: true,*/}
+        {/*          message: formatMessage({*/}
+        {/*            id: 'userandregister.verification-code.required',*/}
+        {/*          }),*/}
+        {/*        },*/}
+        {/*      ]}*/}
+        {/*    >*/}
+        {/*      <Input*/}
+        {/*        size="large"*/}
+        {/*        placeholder={formatMessage({*/}
+        {/*          id: 'userandregister.verification-code.placeholder',*/}
+        {/*        })}*/}
+        {/*      />*/}
+        {/*    </FormItem>*/}
+        {/*  </Col>*/}
+        {/*  <Col span={8}>*/}
+        {/*    <Button*/}
+        {/*      size="large"*/}
+        {/*      disabled={!!count}*/}
+        {/*      className={styles.getCaptcha}*/}
+        {/*      onClick={onGetCaptcha}*/}
+        {/*    >*/}
+        {/*      {count*/}
+        {/*        ? `${count} s`*/}
+        {/*        : formatMessage({*/}
+        {/*            id: 'userandregister.register.get-verification-code',*/}
+        {/*          })}*/}
+        {/*    </Button>*/}
+        {/*  </Col>*/}
+        {/*</Row>*/}
         <FormItem>
           <Button
             size="large"
@@ -351,7 +348,7 @@ const Register = ({ submitting, dispatch, userAndregister }) => {
           >
             <FormattedMessage id="userandregister.register.register" />
           </Button>
-          <Link className={styles.login} to="/user/login">
+          <Link className={styles.login} to="/eccr/login">
             <FormattedMessage id="userandregister.register.sign-in" />
           </Link>
         </FormItem>
@@ -360,7 +357,7 @@ const Register = ({ submitting, dispatch, userAndregister }) => {
   );
 };
 
-export default connect(({ userAndregister, loading }) => ({
-  userAndregister,
-  submitting: loading.effects['userAndregister/submit'],
+export default connect(({ user, loading }) => ({
+  user,
+  submitting: loading.effects['user/register'],
 }))(Register);

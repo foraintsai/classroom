@@ -39,29 +39,19 @@ export default defineConfig({
       component: '../layouts/BlankLayout',
       routes: [
         {
-          path: '/user',
+          path: '/eccr',
           component: '../layouts/UserLayout',
           routes: [
             {
-              path: '/user',
-              redirect: '/user/login',
-            },
-            {
               name: 'login',
               icon: 'smile',
-              path: '/user/login',
+              path: '/eccr/login',
               component: './user/login',
-            },
-            {
-              name: 'register-result',
-              icon: 'smile',
-              path: '/user/register-result',
-              component: './user/register-result',
             },
             {
               name: 'register',
               icon: 'smile',
-              path: '/user/register',
+              path: '/eccr/register',
               component: './user/register',
             },
             {
@@ -77,7 +67,7 @@ export default defineConfig({
           routes: [
             {
               path: '/Home',
-              name: '首页',
+              name: 'home',
               // icon: 'dashboard',
               component: './dashboard/analysis',
               // routes: [
@@ -125,11 +115,6 @@ export default defineConfig({
                   component: './form/advanced-form',
                 },
               ],
-            },
-            {
-              path: '/',
-              redirect: '/Home',
-              authority: ['admin', 'user'],
             },
             {
               component: '404',
